@@ -186,6 +186,9 @@ class FileManagerController extends Controller
      */
     public function rename(RequestValidator $request): JsonResponse
     {
+        $sanitizedName = str_replace('/', '-', $request->input('newName'));
+        $request->merge(['newName' => $sanitizedName]);
+
         event(new Rename($request));
 
         return response()->json(
@@ -271,6 +274,9 @@ class FileManagerController extends Controller
      */
     public function createDirectory(RequestValidator $request): JsonResponse
     {
+        $sanitizedName = str_replace('/', '-', $request->input('name'));
+        $request->merge(['name' => $sanitizedName]);
+
         event(new DirectoryCreating($request));
 
         $createDirectoryResponse = $this->fm->createDirectory(
@@ -295,6 +301,9 @@ class FileManagerController extends Controller
      */
     public function createFile(RequestValidator $request): JsonResponse
     {
+        $sanitizedName = str_replace('/', '-', $request->input('name'));
+        $request->merge(['name' => $sanitizedName]);
+
         event(new FileCreating($request));
 
         $createFileResponse = $this->fm->createFile(
